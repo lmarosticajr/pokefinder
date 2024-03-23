@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon API</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 500px;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consulta de Pokémon</h1>
+    <form action="/pokemon" method="post">
+        <label for="pokemon_name">Nome do Pokémon:</label>
+        <input type="text" id="pokemon_name" name="pokemon_name">
+        <input type="submit" value="Buscar">
+    </form>
+
+    <h1>Buscar Pokémon Aleatório por Tipo</h1>
+    <form action="/random_pokemon" method="get">
+        <label for="pokemon_type">Tipo de Pokémon:</label>
+        <input type="text" id="pokemon_type" name="type">
+        <input type="submit" value="Buscar">
+    </form>
+
+    <h1>Buscar maior nome por Tipo</h1>
+    <form action="/longest" method="get">
+        <label for="pokemon_type">Tipo de Pokémon:</label>
+        <input type="text" id="pokemon_type" name="type">
+        <input type="submit" value="Buscar">
+    </form>
+
+</body>
+</html>

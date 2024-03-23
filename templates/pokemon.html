@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Pokémon</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 500px;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Informações do Pokémon</h1>
+    <p><strong>Nome:</strong> {{ pokemon_info.name }}</p>
+    <p><strong>ID:</strong> {{ pokemon_info.id }}</p>
+    <p><strong>Altura:</strong> {{ pokemon_info.height }}</p>
+    <p><strong>Peso:</strong> {{ pokemon_info.weight }}</p>
+    <p><strong>Tipos:</strong> 
+    {% for type in pokemon_info.types %}
+        {{ type }}
+        {% if not loop.last %}, {% endif %}
+    {% endfor %}
+    </p>
+</body>
+</html>
