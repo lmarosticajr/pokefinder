@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, make_response, session
+from datetime import datetime, timedelta, timezone
+from functools import wraps
+import jwt
 import requests
 import random
 
-app = Flask(__name__)
 
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'adiuhasiduhasdgahd'
 #=========================================== POKEMON TYPE BY NAME =======================================
 def get_pokemon_info(pokemon_name):
     url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}"
@@ -23,9 +27,53 @@ def get_pokemon_info(pokemon_name):
         return None
 
 
+def token_required(func):
+    @wraps(func)
+    def decorated(*args, **kwargs):
+        token = request/args.get('token')
+        if not token:
+            return jsonify({'Alert':'Token is missing'})
+        try:
+            payload = jwt.decode(token, app.config['SECRET_KEY'])
+        except: 
+            return jsonify({'Alert':'invalid token'})
+    return decorated
+
+@app.route('/public')
+def public():
+    return 'For Public'
+
+@app.route('/auth')
+@token_required
+def auth():
+    return render_template('search.html')
+
+
+
 @app.route('/')
+def home():
+    if not session.get('logged in'):
+        return render_template('login.html')
+    else:
+        return 'Logged in currently'
+
+@app.route('/login', methods=['POST'])
+def login():
+    if request.form['username'] and request.form['password'] == '123456':
+        session['logged_in'] = True
+        token = jwt.encode({
+            'user':request.form['username'],
+            'expiration': str(datetime.now(timezone.utc) + timedelta(seconds=120))
+        },
+        app.config['SECRET_KEY'])
+        return render_template('search.html')
+
+    else:
+        return make_response('Unable to verify', 403,{'WWW-Authenticate':'Basic realm: Authentication Failed!'})
+
+@app.route('/search')
 def index():
-    return render_template('index.html')
+    return render_template('search.html')
 
 @app.route('/pokemon', methods=['POST'])
 def get_pokemon():
